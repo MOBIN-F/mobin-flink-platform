@@ -1,0 +1,10 @@
+# Project exclude paths
+/Mlink/target/
+# intellij files
+.idea
+.idea_modules/
+*.ipr
+*.iws
+*.iml
+out
+log.file*
