@@ -35,18 +35,10 @@ public class FastJsonDeserializationSchema implements DeserializationSchema<RowD
     private final boolean ignoreParseErrors;
     private final boolean failOnMissingField;
 
-    private final boolean encrypt;
-
-    private final String secretKey;
-
     /**
      * TypeInformation of the produced {@link RowData}.
      */
     private final TypeInformation<RowData> resultTypeInfo;
-
-    private static final String ALGORITHM = "AES";
-
-    private static final Charset CHARSET = StandardCharsets.UTF_8;
 
     private final FastJsonToRowDataConverters.FastJsonToRowDataConverter runtimeConverter;
 
@@ -60,13 +52,9 @@ public class FastJsonDeserializationSchema implements DeserializationSchema<RowD
             TypeInformation<RowData> resultTypeInfo,
             boolean ignoreParseErrors,
             boolean failOnMissingField,
-            boolean encrypt,
-            String secretKey,
             TimestampFormat timestampFormat) {
         this.ignoreParseErrors = ignoreParseErrors;
         this.failOnMissingField = failOnMissingField;
-        this.encrypt = encrypt;
-        this.secretKey = secretKey;
         this.resultTypeInfo = resultTypeInfo;
         this.fieldCount = rowType.getFieldCount();
         this.runtimeConverter =
@@ -97,24 +85,9 @@ public class FastJsonDeserializationSchema implements DeserializationSchema<RowD
 
     public Object deserializeToJsonNode(byte[] message) throws IOException {
         try {
-            if (encrypt && secretKey != null) {
-                String content = new String(message, CHARSET);
-                byte[] decodedSecretKey = Base64.getDecoder().decode(secretKey);
-                SecretKey key = new SecretKeySpec(decodedSecretKey, ALGORITHM);
-                Cipher cipher = Cipher.getInstance(ALGORITHM);
-                cipher.init(Cipher.DECRYPT_MODE, key);
-                byte[] byteContent = Base64.getDecoder().decode(content);
-                byte[] byteDecode = cipher.doFinal(byteContent);
-                String s = new String(byteDecode);
-                Object parse = JSON.parse(s);
-//                System.out.println(parse.toString());
-                return parse;
-            } else {
                 String s = new String(message);
                 Object parse = JSON.parse(s);
-//                System.out.println(parse.toString());
                 return parse;
-            }
         } catch (Throwable t) {
             if (ignoreParseErrors) {
                 return null;
@@ -145,15 +118,13 @@ public class FastJsonDeserializationSchema implements DeserializationSchema<RowD
         return ignoreParseErrors == that.ignoreParseErrors
                 && failOnMissingField == that.failOnMissingField
                 && fieldCount == that.fieldCount
-                && encrypt == that.encrypt
-                && secretKey == that.secretKey
                 && resultTypeInfo.equals(that.resultTypeInfo)
                 && Objects.equals(resultTypeInfo, that.resultTypeInfo);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(resultTypeInfo, ignoreParseErrors, failOnMissingField,encrypt, secretKey, fieldCount);
+        return Objects.hash(resultTypeInfo, ignoreParseErrors, failOnMissingField, fieldCount);
     }
 
     public static <T> T checkNotNull(@Nullable T reference) {

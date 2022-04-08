@@ -31,16 +31,12 @@ public class FastJsonFormatFactory implements DeserializationFormatFactory, Seri
     public static final ConfigOption<Boolean> IGNORE_PARSE_ERRORS = FastJsonOptions.IGNORE_PARSE_ERRORS;
     public static final ConfigOption<Boolean> FAIL_ON_MISSING_FIELD = FastJsonOptions.FAIL_ON_MISSING_FIELD;
     public static final ConfigOption<String> TIMESTAMP_FORMAT = FastJsonOptions.TIMESTAMP_FORMAT;
-    public static final ConfigOption<Boolean> ENCRYPT = ConfigOptions.key("encrypt").booleanType().defaultValue(false);
-    public static final ConfigOption<String> SECRET_KEY  = ConfigOptions.key("secret-key").stringType().noDefaultValue();
 
     @Override
     public DecodingFormat<DeserializationSchema<RowData>> createDecodingFormat(DynamicTableFactory.Context context, ReadableConfig readableConfig) {
         FactoryUtil.validateFactoryOptions(this,readableConfig);
         final boolean ignoreParseErrors = readableConfig.get(IGNORE_PARSE_ERRORS);
         final boolean failOnMissingField = readableConfig.get(FAIL_ON_MISSING_FIELD);
-        final boolean encrypt = readableConfig.get(ENCRYPT);
-        final String secretKey = readableConfig.get(SECRET_KEY);
         TimestampFormat timestampFormat = FastJsonOptions.getTimestampFormat(readableConfig);
         return new DecodingFormat<DeserializationSchema<RowData>>() {
             @Override
@@ -52,8 +48,6 @@ public class FastJsonFormatFactory implements DeserializationFormatFactory, Seri
                         rowDataTypeInformation,
                         ignoreParseErrors,
                         failOnMissingField,
-                        encrypt,
-                        secretKey,
                         timestampFormat);
             }
 
@@ -87,8 +81,6 @@ public class FastJsonFormatFactory implements DeserializationFormatFactory, Seri
         options.add(IGNORE_PARSE_ERRORS);
         options.add(FAIL_ON_MISSING_FIELD);
         options.add(TIMESTAMP_FORMAT);
-        options.add(ENCRYPT);
-        options.add(SECRET_KEY);
         return options;
     }
 }
