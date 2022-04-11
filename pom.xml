@@ -10,6 +10,8 @@
   <version>1.0-SNAPSHOT</version>
   <modules>
     <module>Mlink</module>
+    <module>flink-formats</module>
+    <module>flink-formats/flink-fastJson</module>
   </modules>
 
   <name>mobin-flink-platform</name>
