@@ -12,6 +12,7 @@
     <module>Mlink</module>
     <module>flink-formats</module>
     <module>flink-formats/flink-fastJson</module>
+    <module>flink-connectors</module>
   </modules>
 
   <name>mobin-flink-platform</name>
