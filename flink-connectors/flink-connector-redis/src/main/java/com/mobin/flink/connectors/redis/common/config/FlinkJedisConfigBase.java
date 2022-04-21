@@ -1,5 +1,6 @@
 package com.mobin.flink.connectors.redis.common.config;
 
+import com.mobin.flink.connectors.redis.common.Util;
 import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
 
 import java.io.Serializable;

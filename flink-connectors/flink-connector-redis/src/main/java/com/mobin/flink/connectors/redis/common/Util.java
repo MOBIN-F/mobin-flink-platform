@@ -6,7 +6,12 @@ package com.mobin.flink.connectors.redis.common;
  * Date: 2022/4/16
  * Time: 9:33 下午
  */
+
 import com.alibaba.fastjson.JSONObject;
+import com.mobin.flink.connectors.redis.RedisDynamicTableFactory;
+import com.mobin.flink.connectors.redis.common.config.FlinkJedisClusterConfig;
+import com.mobin.flink.connectors.redis.common.config.FlinkJedisConfigBase;
+import com.mobin.flink.connectors.redis.common.config.FlinkJedisPoolConfig;
 import org.apache.flink.configuration.ReadableConfig;
 
 import java.net.InetSocketAddress;

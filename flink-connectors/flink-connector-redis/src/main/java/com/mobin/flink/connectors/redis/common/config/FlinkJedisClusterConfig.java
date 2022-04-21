@@ -1,5 +1,6 @@
 package com.mobin.flink.connectors.redis.common.config;
 
+import com.mobin.flink.connectors.redis.common.Util;
 import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
 import redis.clients.jedis.HostAndPort;
 import redis.clients.jedis.Protocol;

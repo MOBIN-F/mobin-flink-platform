@@ -1,5 +1,9 @@
 package com.mobin.flink.connectors.redis.common.config.handler;
 
+import com.mobin.flink.connectors.redis.common.config.FlinkJedisClusterConfig;
+import com.mobin.flink.connectors.redis.common.config.FlinkJedisConfigBase;
+import com.mobin.flink.connectors.redis.common.handler.FlinkJedisConfigHandler;
+import com.mobin.flink.connectors.redis.descriptor.RedisValidator;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.flink.util.Preconditions;
 
@@ -12,7 +16,8 @@ import java.util.stream.Collectors;
 
 
 /**
- * jedis cluster config handler to find and create jedis cluster config use meta.
+ * jedis cluster config handler to find and
+ * create jedis cluster config use meta.
  */
 public class FlinkJedisClusterConfigHandler implements FlinkJedisConfigHandler {
 
