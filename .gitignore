@@ -1,5 +1,5 @@
 # Project exclude paths
-/Mlink/target/
+*/target/
 # intellij files
 .idea
 .idea_modules/
