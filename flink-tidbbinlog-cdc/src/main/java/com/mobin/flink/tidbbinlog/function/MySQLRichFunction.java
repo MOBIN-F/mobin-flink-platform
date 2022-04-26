@@ -25,7 +25,7 @@ public class MySQLRichFunction extends RichSourceFunction<HashMap<String, String
                 MYSQL_URL,
                 MYSQL_USER,
                 MYSQL_PASSWORD);
-        String sql = "SELECT databaseName,tableName FROM tidbTest";
+        String sql = "SELECT databaseName,tableName,columnSchema FROM tidbTest";
         preparedStatement = connection.prepareStatement(sql);
     }
 
