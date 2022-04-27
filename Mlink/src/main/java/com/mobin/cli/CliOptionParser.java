@@ -33,31 +33,12 @@ public class CliOptionParser {
             .desc("connectors")
             .build();
 
-    public static final Option OPTION_DDL = Option
-            .builder("ddl")
-            .longOpt("ddl")
-            .required(false)
-            .numberOfArgs(1)
-            .argName("sql ddl")
-            .desc("sql ddl")
-            .build();
-
-    public static final Option OPTION_DML = Option
-            .builder("dml")
-            .longOpt("dml")
-            .required(false)
-            .numberOfArgs(1)
-            .argName("sql dml")
-            .desc("sql dml")
-            .build();
 
     private static final Options MLINK_CLIENT_OPTIONS = getMlinkClientOptions(new Options());
 
     public static Options getMlinkClientOptions(Options options){
         options.addOption(OPTION_SQL);
         options.addOption(OPTION_CONNECTORS);
-        options.addOption(OPTION_DDL);
-        options.addOption(OPTION_DML);
         return options;
     }
 
@@ -67,8 +48,6 @@ public class CliOptionParser {
             CommandLine line = parser.parse(MLINK_CLIENT_OPTIONS, args, true);
             CliOptions cliOptions = new CliOptions(
                     checkUrl(line, CliOptionParser.OPTION_SQL),
-                    checkUrl(line, CliOptionParser.OPTION_DDL),
-                    checkUrl(line, CliOptionParser.OPTION_DML),
                     line.getOptionValue(CliOptionParser.OPTION_CONNECTORS.getOpt())
             );
             return cliOptions;

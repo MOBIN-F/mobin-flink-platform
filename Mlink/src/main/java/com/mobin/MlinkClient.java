@@ -62,8 +62,6 @@ public class MlinkClient {
     public void start() {
         if (options.getSqlFile() != null) {
             executeInitialization(readFromURL(options.getSqlFile()));
-        } else if (options.getDdlFile() != null && options.getDmlFile() != null) {
-            executeInitialization(readFromURLs(options.getDdlFile(), options.getDmlFile()));
         }
     }
 
@@ -74,19 +72,6 @@ public class MlinkClient {
             throw new MlinkException(
                     String.format("Fail to read content from the %s.",
                             file.getPath()), e);
-        }
-    }
-
-    private String readFromURLs(URL ddlFile, URL dmlFile) {
-        try {
-            String sql = IOUtils.toString(ddlFile, StandardCharsets.UTF_8)
-                    .concat(System.getProperty("line.separator"))
-                    .concat(IOUtils.toString(dmlFile, StandardCharsets.UTF_8));
-            return sql;
-        } catch (IOException e) {
-            throw new MlinkException(
-                    String.format("Fail to read content from the %s , %s.",
-                            dmlFile.getPath() , dmlFile.getPath()), e);
         }
     }
 
@@ -225,12 +210,10 @@ public class MlinkClient {
     private void logInfoOut(String template, Object ... args) {
         String msg = Strings.lenientFormat(template, args);
         LOG.info(msg);
-        System.out.println(msg); //供ailab历史日志查看
     }
 
     private void logErrorOut(String template, Object ... args) {
         String msg = Strings.lenientFormat(template, args);
         LOG.error(msg);
-        System.out.println(msg);
     }
 }
