@@ -1,8 +1,5 @@
 package com.mobin;
 
-import com.google.common.base.Splitter;
-import com.google.common.base.Strings;
-import com.google.common.collect.Iterables;
 import com.mobin.cli.CliOptionParser;
 import com.mobin.cli.CliOptions;
 import com.mobin.cli.CliStatementSplitter;
@@ -133,9 +130,9 @@ public class MlinkClient {
         List<ModifyOperation> InsertOperations = new ArrayList<>();
         Parser parser = tabEnvInternal.getParser();
         //语法校验
-        logInfoOut("执行语句：");
+        LOG.info("执行语句：");
         for (String statement : statementsAndMode.f0) {
-            logInfoOut(statement);
+            LOG.info(statement);
             try {
                 Operation opt = parser.parse(statement).get(0);
                 if (opt instanceof CatalogSinkModifyOperation) {
@@ -171,19 +168,7 @@ public class MlinkClient {
     }
 
     private void callCreateTable(CreateTableOperation operation, TableEnvironmentInternal tabEnvInternal) {
-        if (operation instanceof CreateTableOperation) {
-            if (options != null && options.getConnectors() != null) {
-                String connector = operation.getCatalogTable().getOptions().get("connector");
-                if (Iterables.contains(Splitter.on(",").split(options.getConnectors()),connector)) {
-                    tabEnvInternal.executeInternal(operation);
-                } else {
-                    logErrorOut("目前不支持connector='%s'，仅支持connector='kafka'", connector);
-                    System.exit(-1);
-                }
-            } else {
-                tabEnvInternal.executeInternal(operation);
-            }
-        }
+        tabEnvInternal.executeInternal(operation);
     }
 
     private void executOperation(Operation operation, TableEnvironmentInternal tabEnvInternal) {
@@ -194,8 +179,8 @@ public class MlinkClient {
         TableResult tableResult = tabEnvInternal.executeInternal(operation);
         final String explaination =
                 Objects.requireNonNull(tableResult.collect().next().getField(0)).toString();
-        logInfoOut("【%s】的执行计划：\n" ,statement);
-        logInfoOut(explaination);
+        LOG.info("【%s】的执行计划：\n" ,statement);
+        LOG.info(explaination);
         System.exit(0);
     }
 
@@ -205,15 +190,5 @@ public class MlinkClient {
             String value = setOperation.getValue().get().trim();
             tabEnvInternal.getConfig().getConfiguration().setString(key, value);
         }
-    }
-
-    private void logInfoOut(String template, Object ... args) {
-        String msg = Strings.lenientFormat(template, args);
-        LOG.info(msg);
-    }
-
-    private void logErrorOut(String template, Object ... args) {
-        String msg = Strings.lenientFormat(template, args);
-        LOG.error(msg);
     }
 }

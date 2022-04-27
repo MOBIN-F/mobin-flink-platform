@@ -24,21 +24,10 @@ public class CliOptionParser {
             .desc("flink sql file")
             .build();
 
-    public static final Option OPTION_CONNECTORS= Option
-            .builder("connectors")
-            .longOpt("connectors")
-            .required(false)
-            .numberOfArgs(1)
-            .argName("connectors")
-            .desc("connectors")
-            .build();
-
-
     private static final Options MLINK_CLIENT_OPTIONS = getMlinkClientOptions(new Options());
 
     public static Options getMlinkClientOptions(Options options){
         options.addOption(OPTION_SQL);
-        options.addOption(OPTION_CONNECTORS);
         return options;
     }
 
@@ -47,8 +36,7 @@ public class CliOptionParser {
             DefaultParser parser = new DefaultParser();
             CommandLine line = parser.parse(MLINK_CLIENT_OPTIONS, args, true);
             CliOptions cliOptions = new CliOptions(
-                    checkUrl(line, CliOptionParser.OPTION_SQL),
-                    line.getOptionValue(CliOptionParser.OPTION_CONNECTORS.getOpt())
+                    checkUrl(line, CliOptionParser.OPTION_SQL)
             );
             return cliOptions;
         } catch (ParseException e) {

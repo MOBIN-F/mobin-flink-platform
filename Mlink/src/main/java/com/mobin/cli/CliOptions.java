@@ -10,18 +10,12 @@ import java.net.URL;
  */
 public class CliOptions {
     private final URL sqlFile;
-    private final String connectors;
 
-    public CliOptions(URL sqlFile, String connectors){
+    public CliOptions(URL sqlFile){
         this.sqlFile = sqlFile;
-        this.connectors = connectors;
     }
 
     public URL getSqlFile() {
         return sqlFile;
-    }
-
-    public String getConnectors() {
-        return connectors;
     }
 }
