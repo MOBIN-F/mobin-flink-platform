@@ -1,8 +1,8 @@
-package com.fxbox.streaming.connector.redis;
+package com.mobin.flink.connectors.redis;
 
-import common.Util;
-import common.container.RedisCommandsContainer;
-import common.container.RedisCommandsContainerBuilder;
+import com.mobin.flink.connectors.redis.common.Util;
+import com.mobin.flink.connectors.redis.common.container.RedisCommandsContainer;
+import com.mobin.flink.connectors.redis.common.container.RedisCommandsContainerBuilder;
 import org.apache.flink.configuration.ReadableConfig;
 import org.apache.flink.shaded.guava18.com.google.common.cache.Cache;
 import org.apache.flink.shaded.guava18.com.google.common.cache.CacheBuilder;
@@ -25,7 +25,8 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
-import static RedisDynamicTableFactory.*;
+import static com.mobin.flink.connectors.redis.RedisDynamicTableFactory.*;
+
 
 /**
  * Created with IDEA
