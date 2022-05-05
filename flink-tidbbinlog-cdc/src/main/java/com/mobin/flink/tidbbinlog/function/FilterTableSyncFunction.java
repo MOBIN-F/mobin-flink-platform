@@ -7,14 +7,14 @@ import org.apache.flink.api.common.state.BroadcastState;
 import org.apache.flink.api.common.state.MapStateDescriptor;
 import org.apache.flink.api.common.typeinfo.Types;
 import org.apache.flink.api.java.tuple.Tuple2;
-import org.apache.flink.streaming.api.functions.co.BroadcastProcessFunction;
+import org.apache.flink.streaming.api.functions.co.KeyedBroadcastProcessFunction;
 import org.apache.flink.util.Collector;
 
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
-public class FilterTableSyncFunction extends BroadcastProcessFunction<HashMap<String, Tuple2<HashSet<String>,List<Object>>>, HashMap<String, String>, String> {
+public class FilterTableSyncFunction extends KeyedBroadcastProcessFunction<Object,HashMap<String, Tuple2<HashSet<String>,List<Object>>>, HashMap<String, String>, String> {
     private MapStateDescriptor<String, String> mapStateDescriptor = new MapStateDescriptor<String, String>("tableNames", Types.STRING, Types.STRING);
 
     @Override
