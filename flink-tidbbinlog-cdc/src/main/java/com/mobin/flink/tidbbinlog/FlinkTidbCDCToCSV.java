@@ -9,6 +9,8 @@ import org.apache.flink.api.common.serialization.AbstractDeserializationSchema;
 import org.apache.flink.api.common.serialization.SimpleStringEncoder;
 import org.apache.flink.api.common.state.MapStateDescriptor;
 import org.apache.flink.api.common.typeinfo.Types;
+import org.apache.flink.api.java.functions.NullByteKeySelector;
+import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.connector.file.sink.FileSink;
 import org.apache.flink.connector.kafka.source.KafkaSource;
 import org.apache.flink.connector.kafka.source.enumerator.initializer.OffsetsInitializer;
@@ -28,6 +30,7 @@ import org.apache.flink.table.api.bridge.java.StreamTableEnvironment;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -83,9 +86,9 @@ public class FlinkTidbCDCToCSV {
 
         DataStreamSource<byte[]> kafkaSourceStreaming = env.fromSource(kafkaSource, WatermarkStrategy.noWatermarks(), "kafka_source");
 
-        SingleOutputStreamOperator<HashMap<String, List<Object>>> parseTiDBBinlogStreaming = kafkaSourceStreaming.flatMap(new ParseTiDBBinlogFunction()).uid("parseTiDBBinlog");
+        SingleOutputStreamOperator<HashMap<String, Tuple2<HashSet<String>,List<Object>>>> parseTiDBBinlogStreaming = kafkaSourceStreaming.flatMap(new ParseTiDBBinlogFunction()).uid("parseTiDBBinlog");
 
-        SingleOutputStreamOperator<String> tidbDataOperator = parseTiDBBinlogStreaming.connect(broadcastStreaming).process(new FilterTableSyncFunction()).uid("tidbDataOperator");
+        SingleOutputStreamOperator<String> tidbDataOperator = parseTiDBBinlogStreaming.keyBy(new NullByteKeySelector<>()).connect(broadcastStreaming).process(new FilterTableSyncFunction()).uid("tidbDataOperator");
 
         final FileSink<String> hdfsSink = FileSink
                 .forRowFormat(new Path(TIDBBINLOG_DFS_BASE_PATH), new SimpleStringEncoder<String>("UTF-8"))
