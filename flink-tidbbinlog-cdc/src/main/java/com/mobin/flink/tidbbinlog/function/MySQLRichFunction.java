@@ -40,7 +40,7 @@ public class MySQLRichFunction extends RichSourceFunction<HashMap<String, String
                 maps.put(databaseName + tableName, null);
             }
             ctx.collect(maps);
-            Thread.sleep(MYSQL_INTERVAL_MS);
+            Thread.sleep(MYSQL_INTERVAL_MIN);
         }
     }
 
