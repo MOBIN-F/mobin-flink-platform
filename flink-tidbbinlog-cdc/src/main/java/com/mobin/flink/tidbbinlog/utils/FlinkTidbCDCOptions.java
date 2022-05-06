@@ -34,7 +34,7 @@ public class FlinkTidbCDCOptions {
 
     public static final String TIDBBINLOG_DFS_BASE_PATH = tool.get("tidbbinlog.dfs.base.path");
 
-    public static final Integer MYSQL_INTERVAL_MS = tool.getInt("mysql.interval.min")  * 60 * 1000;
+    public static final Integer MYSQL_INTERVAL_MIN = tool.getInt("mysql.interval.min")  * 60 * 1000;
 
     public static final Integer FLINK_CHECKPOINT_INTERVAL_MIN =  tool.getInt("flink.checkpoint.interval.min") * 60 * 1000;
 
