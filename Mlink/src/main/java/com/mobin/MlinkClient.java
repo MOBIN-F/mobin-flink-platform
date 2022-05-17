@@ -6,7 +6,6 @@ import com.mobin.cli.CliOptions;
 import com.mobin.cli.CliStatementSplitter;
 import org.apache.commons.io.IOUtils;
 import org.apache.flink.api.java.tuple.Tuple2;
-import org.apache.flink.api.java.utils.ParameterTool;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.table.api.EnvironmentSettings;
 import org.apache.flink.table.api.SqlParserException;
@@ -70,24 +69,15 @@ public class MlinkClient {
         }
     }
 
-    private void setDefaultSettings(TableEnvironment tableEnv, boolean isStreaming){
-        try {
-            ParameterTool active = ParameterTool.fromPropertiesFile(MlinkClient.class.getClassLoader().getResourceAsStream("app.properties"));
-            String activeFile = String.format("app-%s.properties", active.get("profiles.active"));
-            ParameterTool tool = ParameterTool.fromPropertiesFile(MlinkClient.class.getClassLoader().getResourceAsStream(activeFile));
+    private void setDefaultSettings(TableEnvironment tableEnv){
+        Configuration tableConf = tableEnv.getConfig().getConfiguration();
+        tableEnv.getConfig().setLocalTimeZone(ZoneOffset.ofHours(8));
+        tableConf.setBoolean("table.dynamic-table-options.enabled",true);
 
-            Configuration tableConf = tableEnv.getConfig().getConfiguration();
-            tableEnv.getConfig().setLocalTimeZone(ZoneOffset.ofHours(8));
-
-            tableConf.setBoolean("table.dynamic-table-options.enabled",true);
-
-            tableConf.setString("restart-strategy", "failure-rate");
-            tableConf.setString("restart-strategy.failure-rate.delay", "10s");
-            tableConf.setString("restart-strategy.failure-rate.failure-rate-interval", "5min");
-            tableConf.setInteger("restart-strategy.failure-rate.max-failures-per-interval", 3);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        tableConf.setString("restart-strategy", "failure-rate");
+        tableConf.setString("restart-strategy.failure-rate.delay", "10s");
+        tableConf.setString("restart-strategy.failure-rate.failure-rate-interval", "5min");
+        tableConf.setInteger("restart-strategy.failure-rate.max-failures-per-interval", 3);
     }
 
     public TableResult executeInitialization(String content) {
@@ -113,7 +103,7 @@ public class MlinkClient {
             LOG.info("该任务为batch任务");
         }
         TableEnvironment tableEnv = TableEnvironment.create(settings);
-        setDefaultSettings(tableEnv, statementsAndMode.f1);
+        setDefaultSettings(tableEnv);
         TableEnvironmentInternal tabEnvInternal = (TableEnvironmentInternal) tableEnv;
 
 
