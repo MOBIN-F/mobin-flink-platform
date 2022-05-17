@@ -1,5 +1,6 @@
 package com.mobin;
 
+import com.google.common.base.Preconditions;
 import com.mobin.cli.CliOptionParser;
 import com.mobin.cli.CliOptions;
 import com.mobin.cli.CliStatementSplitter;
@@ -30,10 +31,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-
-/**
- * Hello world!
- */
 public class MlinkClient {
 
     private static final Logger LOG = LoggerFactory.getLogger(MlinkClient.class);
@@ -57,6 +54,7 @@ public class MlinkClient {
     }
 
     public void start() {
+        Preconditions.checkNotNull(options.getSqlFile(),"sql file must not null");
         if (options.getSqlFile() != null) {
             executeInitialization(readFromURL(options.getSqlFile()));
         }
@@ -80,14 +78,6 @@ public class MlinkClient {
 
             Configuration tableConf = tableEnv.getConfig().getConfiguration();
             tableEnv.getConfig().setLocalTimeZone(ZoneOffset.ofHours(8));
-            if (isStreaming) {  //流模式才能设置ck相关参数
-                tableConf.setString("state.backend", "rocksdb");
-                tableConf.setString("state.checkpoints.dir", tool.get("rocks.db.checkpoint.path"));
-                tableConf.setString("state.backend.incremental", "true");
-                tableConf.setString("execution.checkpointing.interval", "2min");
-                tableConf.setString("execution.checkpointing.min-pause", "10s");
-                tableConf.setString("execution.checkpointing.externalized-checkpoint-retention", "RETAIN_ON_CANCELLATION");
-            }
 
             tableConf.setBoolean("table.dynamic-table-options.enabled",true);
 
