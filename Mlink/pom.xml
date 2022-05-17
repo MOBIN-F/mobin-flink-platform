@@ -120,12 +120,12 @@
       <scope>provided</scope>
     </dependency>
 
-<!--    <dependency>-->
-<!--      <groupId>org.apache.iceberg</groupId>-->
-<!--      <artifactId>iceberg-flink-runtime-1.13</artifactId>-->
-<!--      <version>0.13.1</version>-->
-<!--      <scope>provided</scope>-->
-<!--    </dependency>-->
+    <dependency>
+      <groupId>org.apache.iceberg</groupId>
+      <artifactId>iceberg-flink-runtime-1.13</artifactId>
+      <version>0.13.1</version>
+      <scope>provided</scope>
+    </dependency>
 
     <dependency>
       <groupId>org.apache.flink</groupId>
